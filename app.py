@@ -17,7 +17,7 @@ tarefas = [
     }
 
 ]
-@app.route("/tarefa/<int:id>/",methods=['GET','PUT'])
+@app.route("/tarefa/<int:id>/",methods=['GET','PUT','DELETE'])
 def tarefa(id):
     if request.method == 'GET':
         try:
@@ -27,6 +27,7 @@ def tarefa(id):
         except Exception as ex:
             response = {'status':'Erro','msg': ex}
         return jsonify(response)
+
     elif request.method == 'PUT':
         status = json.loads(request.data)
         if tarefas[id]['status'] != status:
@@ -35,6 +36,17 @@ def tarefa(id):
         else:
             response = {'msg':'Erro: o registro já encontra-se no estado atual'}
         return jsonify(response)
+
+    elif request.method == 'DELETE':
+        try:
+            tarefas.pop(id)
+            response = {'status':'sucesso','msg':'registro deletado'}
+        except IndexError:
+            response = {'status':'Erro','msg':'Registro nao encontrado'}
+        except Exception:
+            response = {'status':'Erro','msg':'Desconhecido'}
+        return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
