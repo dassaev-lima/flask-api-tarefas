@@ -21,6 +21,17 @@ tarefas = [
 def lista_tarefas():
     return jsonify(tarefas)
 
+@app.route("/tarefa/nova/",methods=['POST'])
+def add_tarefa():
+    nova_tarefa = json.loads(request.data)
+    if not nova_tarefa is None:
+        nova_tarefa['status'] = False
+        tarefas.append(nova_tarefa)
+        response = {'status':'sucesso','msg':'registro adicionado'}
+    else:
+        response = {'status':'Erro','msg':'Erro ao inserir registro'}
+    return jsonify(response)
+
 @app.route("/tarefa/<int:id>/",methods=['GET','PUT','DELETE'])
 def tarefa(id):
     if request.method == 'GET':
