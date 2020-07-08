@@ -1,5 +1,5 @@
 from flask import Flask,jsonify,request
-
+import json
 app = Flask(__name__)
 
 tarefas = [
@@ -17,7 +17,7 @@ tarefas = [
     }
 
 ]
-@app.route("/tarefa/<int:id>/",methods=['GET'])
+@app.route("/tarefa/<int:id>/",methods=['GET','PUT'])
 def tarefa(id):
     if request.method == 'GET':
         try:
@@ -26,6 +26,14 @@ def tarefa(id):
             response = {'status':'Erro','msg':'registro nao encontrado'}
         except Exception as ex:
             response = {'status':'Erro','msg': ex}
+        return jsonify(response)
+    elif request.method == 'PUT':
+        status = json.loads(request.data)
+        if tarefas[id]['status'] != status:
+            tarefas[id]['status'] = status
+            response = {'msg':'status do registro alterado'}
+        else:
+            response = {'msg':'Erro: o registro já encontra-se no estado atual'}
         return jsonify(response)
 
 if __name__ == '__main__':
