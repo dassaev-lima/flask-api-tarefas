@@ -17,6 +17,10 @@ tarefas = [
     }
 
 ]
+@app.route("/tarefas/",methods=['GET'])
+def lista_tarefas():
+    return jsonify(tarefas)
+
 @app.route("/tarefa/<int:id>/",methods=['GET','PUT','DELETE'])
 def tarefa(id):
     if request.method == 'GET':
