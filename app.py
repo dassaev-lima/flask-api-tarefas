@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify,request
 
 app = Flask(__name__)
 
@@ -17,9 +17,16 @@ tarefas = [
     }
 
 ]
-@app.route("/",methods=['GET'])
-def tarefa():
-    return 'Olá mundo'
+@app.route("/tarefa/<int:id>/",methods=['GET'])
+def tarefa(id):
+    if request.method == 'GET':
+        try:
+            response = tarefas[id]
+        except IndexError:
+            response = {'status':'Erro','msg':'registro nao encontrado'}
+        except Exception as ex:
+            response = {'status':'Erro','msg': ex}
+        return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
